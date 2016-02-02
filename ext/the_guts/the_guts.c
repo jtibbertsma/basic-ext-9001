@@ -92,6 +92,7 @@ Init_the_guts(void)
 
   mBasicExt9001 = rb_define_module("BasicExt9001");
   cGuts = rb_define_class_under(mBasicExt9001, "Guts", rb_cData);
+  eGutsError = rb_define_class(eGutsError, rb_eRuntimeError);
 
   rb_define_alloc_func(cGuts, guts_allocate);
 
