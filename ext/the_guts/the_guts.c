@@ -16,19 +16,19 @@ guts_mark(void *p)
   int i;
 
   for (i = 0; i < guts->size; ++i) {
-    rb_gc_mark(&guts->stuff[i]);
+    rb_gc_mark(guts->stuff[i]);
   }
 }
 
 #define guts_free RUBY_DEFAULT_FREE
 
 static size_t
-guts_memsize(void *p)
+guts_memsize(const void *p)
 {
   return sizeof(struct guts);
 }
 
-static const rb_data_type_t guts_type = {
+static rb_data_type_t guts_type = {
   "the_guts",
   {
   guts_mark,
@@ -42,7 +42,7 @@ static VALUE
 guts_allocate(VALUE klass)
 {
   struct guts *ptr;
-  VALUE obj = TypedData_Make_Struct(klass, struct guts, guts_type, ptr);
+  VALUE obj = TypedData_Make_Struct(klass, struct guts, &guts_type, ptr);
 
   /* do initialization of p */
 
@@ -51,7 +51,7 @@ guts_allocate(VALUE klass)
 
 #define ACQUIRE_GUTS(obj) \
   struct guts *guts; \
-  TypedData_Get_Struct(obj, struct guts, guts_type, guts)
+  TypedData_Get_Struct(obj, struct guts, &guts_type, guts)
 
 static VALUE
 guts_pop(VALUE obj)

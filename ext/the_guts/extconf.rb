@@ -1,2 +1,2 @@
 require 'mkmf'
-create_makefile
+create_makefile 'the_guts'
