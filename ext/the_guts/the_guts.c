@@ -20,7 +20,7 @@ guts_mark(void *p)
   }
 }
 
-#define guts_free RUBY_DEFAULT_FREE
+#define guts_free RUBY_TYPED_DEFAULT_FREE
 
 static size_t
 guts_memsize(const void *p)
@@ -28,7 +28,7 @@ guts_memsize(const void *p)
   return sizeof(struct guts);
 }
 
-static rb_data_type_t guts_type = {
+static const rb_data_type_t guts_type = {
   "the_guts",
   {
   guts_mark,
@@ -49,6 +49,18 @@ guts_allocate(VALUE klass)
   return obj;
 }
 
+static int
+empty(struct guts *guts)
+{
+  return guts->size == 0;
+}
+
+static int
+full(struct guts *guts)
+{
+  return guts->size == GUTS_CAPA;
+}
+
 #define ACQUIRE_GUTS(obj) \
   struct guts *guts; \
   TypedData_Get_Struct(obj, struct guts, &guts_type, guts)
@@ -58,7 +70,7 @@ guts_pop(VALUE obj)
 {
   ACQUIRE_GUTS(obj);
 
-  if (guts->size <= 0) rb_raise(eGutsError, "The guts is empty");
+  if (empty(guts)) rb_raise(eGutsError, "The guts is empty");
   --guts->size;
 
   return guts->stuff[guts->size];
@@ -69,7 +81,7 @@ guts_push(VALUE obj, VALUE new_item)
 {
   ACQUIRE_GUTS(obj);
 
-  if (guts->size == GUTS_CAPA) rb_raise(eGutsError, "The guts is full");
+  if (full(guts)) rb_raise(eGutsError, "The guts is full");
   ++guts->size;
   RB_OBJ_WRITE(obj, &guts->stuff[guts->size], new_item);
 
@@ -83,6 +95,22 @@ guts_size(VALUE obj)
 
   long size = guts->size;
   return LONG2FIX(size);
+}
+
+static VALUE
+guts_empty_q(VALUE obj)
+{
+  ACQUIRE_GUTS(obj);
+
+  return empty(guts) ? Qtrue : Qfalse;
+}
+
+static VALUE
+guts_full_q(VALUE obj)
+{
+  ACQUIRE_GUTS(obj);
+
+  return full(guts) ? Qtrue : Qfalse;
 }
 
 void
@@ -99,6 +127,8 @@ Init_the_guts(void)
   rb_define_method(cGuts, "pop", guts_pop, 0);
   rb_define_method(cGuts, "push", guts_push, 1);
   rb_define_method(cGuts, "size", guts_size, 0);
+  rb_define_method(cGuts, "empty?", guts_empty_q, 0);
+  rb_define_method(cGuts, "full?", guts_full_q, 0);
 
   rb_define_alias(cGuts, "length", "size");
   rb_define_const(cGuts, "CAPACITY", GUTS_CAPA);
