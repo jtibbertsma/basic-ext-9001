@@ -101,4 +101,5 @@ Init_the_guts(void)
   rb_define_method(cGuts, "size", guts_size, 0);
 
   rb_define_alias(cGuts, "length", "size");
+  rb_define_const(cGuts, "CAPACITY", GUTS_CAPA);
 }
