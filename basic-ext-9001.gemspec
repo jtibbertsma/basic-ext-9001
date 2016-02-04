@@ -11,5 +11,8 @@ Gem::Specification.new do |s|
   s.license = 'none lol'
   s.homepage = 'http://github.com/jtibbertsma/basic-ext-9001'
   s.files = Dir['{ext/**/*,lib/**/*}'] + %w(basic-ext-9001.gemspec Rakefile readme.md)
+  s.test_files = Dir['{spec/**/*}']
   s.add_development_dependency 'rake'
+  s.add_development_dependency 'rake-compiler'
+  s.add_development_dependency 'rspec'
 end

@@ -82,8 +82,8 @@ guts_push(VALUE obj, VALUE new_item)
   ACQUIRE_GUTS(obj);
 
   if (full(guts)) rb_raise(eGutsError, "The guts is full");
-  ++guts->size;
   RB_OBJ_WRITE(obj, &guts->stuff[guts->size], new_item);
+  ++guts->size;
 
   return Qnil;
 }
