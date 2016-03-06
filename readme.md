@@ -14,7 +14,7 @@ In the ruby interpreter, there are several 'special constants': Fixnums, interna
 
 a: So, returning it turns out that no method should ever return Qundef. If the interpreter sees a return value of Qundef from a cfunc, it assumes there's a core bug and it pukes out a huge bug report.
 
-Incidentally, undef actually is a keyword in Ruby, but it means something completely different.
+Incidentally, undef actually <i>is</i> a keyword in Ruby, but it means something completely different.
 
 ```ruby
 class Klass
