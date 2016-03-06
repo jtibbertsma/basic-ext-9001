@@ -12,7 +12,7 @@ q: What happens if you return Qundef from a method?
 
 In the ruby interpreter, there are several 'special constants': Fixnums, internal Symbols, Qfalse, Qtrue, Qnil, and Qundef. Although Qundef exists, it doesn't seem to be accessible from ruby code. I'l try returning it from a method.
 
-a: So, returning it turns out that no method should ever return Qundef. If the interpreter sees a return value of Qundef from a cfunc, it assumes there's a core bug and it pukes out a huge bug report.
+a: So, it turns out that no method should ever return Qundef. If the interpreter sees a return value of Qundef from a cfunc, it assumes there's a core bug and it pukes out a huge bug report.
 
 Incidentally, undef actually <i>is</i> a keyword in Ruby, but it means something completely different.
 
