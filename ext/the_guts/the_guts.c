@@ -113,6 +113,12 @@ guts_full_q(VALUE obj)
   return full(guts) ? Qtrue : Qfalse;
 }
 
+static VALUE
+guts_undef(VALUE obj)
+{
+  return Qundef;
+}
+
 void
 Init_the_guts(void)
 {
@@ -129,6 +135,8 @@ Init_the_guts(void)
   rb_define_method(cGuts, "size", guts_size, 0);
   rb_define_method(cGuts, "empty?", guts_empty_q, 0);
   rb_define_method(cGuts, "full?", guts_full_q, 0);
+
+  rb_define_method(cGuts, "undef", guts_undef, 0);
 
   rb_define_alias(cGuts, "length", "size");
   rb_define_const(cGuts, "CAPACITY", GUTS_CAPA);
