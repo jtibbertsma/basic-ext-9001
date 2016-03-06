@@ -22,11 +22,15 @@ class Klass
     :something
   end
 
-  undef :method
+  undef method
 end
 
 k = Klass.new
 k.method
 ```
 
-The above code raises a `NoMethodError`.
+The above code raises this error:
+
+```
+NoMethodError: undefined method `method' for #<Klass:0x007fd32153e318>
+```
